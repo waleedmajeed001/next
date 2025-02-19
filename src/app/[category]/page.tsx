@@ -13,22 +13,22 @@ async function getData(category: string) {
         "categoryName": category->name
   }`;
 
-  return client.fetch(query);
+  return client.fetch<simplifiedProduct[]>(query);
 }
 
 export const dynamic = "force-dynamic";
 
 interface CategoryPageProps {
-  params: { category: string }; // ✅ Ensuring params has the correct type
+  params: { category?: string }; // ✅ Optional category to avoid runtime errors
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  if (!params?.category) {
+  if (!params || !params.category) {
     return <p className="text-center text-xl font-semibold">Loading...</p>;
   }
 
   const category = decodeURIComponent(params.category);
-  const data: simplifiedProduct[] = await getData(category);
+  const data = await getData(category);
 
   return (
     <div className="bg-white">
@@ -49,7 +49,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <div className="aspect-square w-full overflow-hidden rounded-md lg:h-80">
                 <Image
                   src={product.imageUrl}
-                  alt="Product image"
+                  alt={product.name}
                   className="w-full h-full object-cover object-center lg:h-full lg:w-full"
                   width={300}
                   height={300}
