@@ -2,7 +2,6 @@ import Link from "next/link";
 import { simplifiedProduct } from "../interface";
 import { client } from "../lib/sanity";
 import Image from "next/image";
-import { GetServerSideProps } from "next";
 
 async function getData(category: string) {
   const query = `*[_type == "product" && category->name == "${category}"] {
