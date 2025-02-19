@@ -21,7 +21,7 @@ export default function ShoppingCartModal() {
     redirectToCheckout,
   } = useShoppingCart();
 
-  async function handleCheckoutClick(event: any) {
+  async function handleCheckoutClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     try {
       const result = await redirectToCheckout();
@@ -32,6 +32,7 @@ export default function ShoppingCartModal() {
       console.log(error);
     }
   }
+  
   return (
     <Sheet open={shouldDisplayCart} onOpenChange={() => handleCartClick()}>
       <SheetContent className="sm:max-w-lg w-[90vw]">

@@ -9,7 +9,7 @@ export interface ProductCart {
   description: string;
   price: number;
   currency: string;
-  image: any;
+  image: object;  // ✅ Changed from 'any' to 'object'
   price_id: string;
 }
 
@@ -31,10 +31,12 @@ export default function AddToBag({
     image: urlfor(image).url(),
     price_id: price_id,
   };
+
   return (
     <Button
       onClick={() => {
-        addItem(product), handleCartClick();
+        addItem(product);  // ✅ Fixed the error
+        handleCartClick();
       }}
     >
       Add To Cart
