@@ -22,7 +22,7 @@ interface PageProps {
   params: { category: string };
 }
 
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({ params }: { params: { category: string } }) {
   if (!params?.category) {
     return <p className="text-center text-xl font-semibold">Loading...</p>;
   }
