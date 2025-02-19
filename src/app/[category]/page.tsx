@@ -21,10 +21,10 @@ export const dynamic = "force-dynamic";
 export default async function CategoryPage({
   params,
 }: {
-  params: any; // ✅ Fix: Allow params to match Next.js expectations
+  params: { category: string }; // ✅ Corrected type
 }) {
   // ✅ Ensure category is always a valid string
-  const category = decodeURIComponent(params?.category ?? "");
+  const category = decodeURIComponent(params.category);
 
   // ✅ Fetch data
   const data: simplifiedProduct[] = await getData(category);
