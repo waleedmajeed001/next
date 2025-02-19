@@ -13,8 +13,7 @@ async function getData(category: string) {
         "categoryName": category->name
   }`;
 
-  const data = await client.fetch(query);
-  return data;
+  return client.fetch(query);
 }
 
 export const dynamic = "force-dynamic";
@@ -22,10 +21,10 @@ export const dynamic = "force-dynamic";
 export default async function CategoryPage({
   params,
 }: {
-  params: { category: string }; // ✅ Ensure category is always a string
+  params: any; // ✅ Fix: Allow params to match Next.js expectations
 }) {
-  // ✅ Decode category safely
-  const category = decodeURIComponent(params.category || "");
+  // ✅ Ensure category is always a valid string
+  const category = decodeURIComponent(params?.category ?? "");
 
   // ✅ Fetch data
   const data: simplifiedProduct[] = await getData(category);
