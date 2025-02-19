@@ -2,6 +2,7 @@ import Link from "next/link";
 import { simplifiedProduct } from "../interface";
 import { client } from "../lib/sanity";
 import Image from "next/image";
+import { GetServerSideProps } from "next";
 
 async function getData(category: string) {
   const query = `*[_type == "product" && category->name == "${category}"] {
@@ -18,15 +19,16 @@ async function getData(category: string) {
 
 export const dynamic = "force-dynamic";
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: { category: string }; // ✅ Corrected type
-}) {
-  // ✅ Ensure category is always a valid string
-  const category = decodeURIComponent(params.category);
+interface CategoryPageProps {
+  params: { category: string }; // ✅ Ensuring params has the correct type
+}
 
-  // ✅ Fetch data
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  if (!params?.category) {
+    return <p className="text-center text-xl font-semibold">Loading...</p>;
+  }
+
+  const category = decodeURIComponent(params.category);
   const data: simplifiedProduct[] = await getData(category);
 
   return (
