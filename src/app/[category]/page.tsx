@@ -6,12 +6,12 @@ import Image from "next/image";
 async function getData(category: string) {
   const query = `*[_type == "product" && category->name == "${category}"] {
         _id,
-          "imageUrl": images[0].asset->url,
-          price,
-          name,
-          "slug": slug.current,
-          "categoryName": category->name
-}`;
+        "imageUrl": images[0].asset->url,
+        price,
+        name,
+        "slug": slug.current,
+        "categoryName": category->name
+  }`;
 
   const data = await client.fetch(query);
   return data;
@@ -22,17 +22,12 @@ export const dynamic = "force-dynamic";
 export default async function CategoryPage({
   params,
 }: {
-  params: { category?: string };
+  params: { category: string }; // ✅ Ensure category is always a string
 }) {
-  // ✅ Ensure params.category is valid before using it
-  if (!params?.category) {
-    return <p className="text-center text-xl font-semibold">Loading...</p>;
-  }
+  // ✅ Decode category safely
+  const category = decodeURIComponent(params.category || "");
 
-  // ✅ Decode category in case it has URL-encoded characters (e.g., spaces)
-  const category = decodeURIComponent(params.category);
-
-  // ✅ Fetch data after ensuring category exists
+  // ✅ Fetch data
   const data: simplifiedProduct[] = await getData(category);
 
   return (
