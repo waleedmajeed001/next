@@ -18,12 +18,12 @@ async function getData(category: string) {
 
 export const dynamic = "force-dynamic";
 
-interface CategoryPageProps {
-  params: { category?: string }; // ✅ Optional category to avoid runtime errors
-}
-
-export default async function CategoryPage({ params }: CategoryPageProps) {
-  if (!params || !params.category) {
+export default async function CategoryPage({
+  params,
+}: {
+  params: Record<string, string>;
+}) {
+  if (!params?.category) {
     return <p className="text-center text-xl font-semibold">Loading...</p>;
   }
 
