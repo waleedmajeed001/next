@@ -30,13 +30,12 @@ async function getData(category: string): Promise<SimplifiedProduct[]> {
 // Ensure dynamic page generation
 export const dynamic = "force-dynamic";
 
-// ✅ Correct Next.js 14 typing for page params
-interface CategoryPageProps {
+// ✅ Correct Next.js typing for page params
+export default async function CategoryPage({
+  params,
+}: {
   params: { category: string };
-}
-
-// Category page component
-export default async function CategoryPage({ params }: CategoryPageProps) {
+}) {
   if (!params?.category) {
     return notFound();
   }
