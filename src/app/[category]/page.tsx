@@ -2,6 +2,7 @@ import Link from "next/link";
 import { client } from "../lib/sanity";
 import Image from "next/image";
 
+// Define product type
 interface SimplifiedProduct {
   _id: string;
   imageUrl: string;
@@ -25,18 +26,16 @@ async function getData(category: string): Promise<SimplifiedProduct[]> {
   return client.fetch<SimplifiedProduct[]>(query);
 }
 
-// Dynamic page generation
+// Ensure dynamic page generation
 export const dynamic = "force-dynamic";
 
-// Define Next.js Page Props
-interface PageProps {
-  params: {
-    category: string;
-  };
-}
+// ✅ Define Next.js params explicitly
+type CategoryPageProps = {
+  params: Record<string, string>;
+};
 
 // Category page component
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!params?.category) {
     return <p className="text-center text-xl font-semibold">Loading...</p>;
   }
