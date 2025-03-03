@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { client } from "../lib/sanity";
 import Image from "next/image";
+import { notFound } from "next/navigation";
+import { client } from "../lib/sanity";
 
 // Define product type
 interface SimplifiedProduct {
@@ -14,7 +15,7 @@ interface SimplifiedProduct {
 
 // Fetch products based on category
 async function getData(category: string): Promise<SimplifiedProduct[]> {
-  const query = `*[_type == "product" && category->name == "${category}"] {
+  const query = `*[_type == "product" && category->name == $category] {
         _id,
         "imageUrl": images[0].asset->url,
         price,
@@ -23,21 +24,21 @@ async function getData(category: string): Promise<SimplifiedProduct[]> {
         "categoryName": category->name
   }`;
 
-  return client.fetch<SimplifiedProduct[]>(query);
+  return client.fetch<SimplifiedProduct[]>(query, { category });
 }
 
 // Ensure dynamic page generation
 export const dynamic = "force-dynamic";
 
-// ✅ Define Next.js params explicitly
-type CategoryPageProps = {
-  params: Record<string, string>;
-};
+// ✅ Correct Next.js 14 typing for page params
+interface CategoryPageProps {
+  params: { category: string };
+}
 
 // Category page component
 export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!params?.category) {
-    return <p className="text-center text-xl font-semibold">Loading...</p>;
+    return notFound();
   }
 
   const category = decodeURIComponent(params.category);
