@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Metadata } from "next";
 import { client } from "../lib/sanity";
 import Image from "next/image";
 
