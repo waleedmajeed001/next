@@ -1,9 +1,19 @@
 import Link from "next/link";
-import { simplifiedProduct } from "../interface";
+import { Metadata } from "next";
 import { client } from "../lib/sanity";
 import Image from "next/image";
 
-async function getData(category: string) {
+interface SimplifiedProduct {
+  _id: string;
+  imageUrl: string;
+  price: number;
+  name: string;
+  slug: string;
+  categoryName: string;
+}
+
+// Fetch products based on category
+async function getData(category: string): Promise<SimplifiedProduct[]> {
   const query = `*[_type == "product" && category->name == "${category}"] {
         _id,
         "imageUrl": images[0].asset->url,
@@ -13,12 +23,21 @@ async function getData(category: string) {
         "categoryName": category->name
   }`;
 
-  return client.fetch<simplifiedProduct[]>(query);
+  return client.fetch<SimplifiedProduct[]>(query);
 }
 
+// Dynamic page generation
 export const dynamic = "force-dynamic";
 
-export default async function CategoryPage({ params }: { params: { category: string } }) {
+// Define Next.js Page Props
+interface PageProps {
+  params: {
+    category: string;
+  };
+}
+
+// Category page component
+export default async function CategoryPage({ params }: PageProps) {
   if (!params?.category) {
     return <p className="text-center text-xl font-semibold">Loading...</p>;
   }
