@@ -2,19 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { client } from "../lib/sanity";
-
-// Define product type
-interface SimplifiedProduct {
-  _id: string;
-  imageUrl: string;
-  price: number;
-  name: string;
-  slug: string;
-  categoryName: string;
-}
+import { simplifiedProduct } from "../interface";
 
 // Fetch products based on category
-async function getData(category: string): Promise<SimplifiedProduct[]> {
+async function getData(category: string): Promise<simplifiedProduct[]> {
   const query = `*[_type == "product" && category->name == $category] {
         _id,
         "imageUrl": images[0].asset->url,
@@ -24,19 +15,14 @@ async function getData(category: string): Promise<SimplifiedProduct[]> {
         "categoryName": category->name
   }`;
 
-  return client.fetch<SimplifiedProduct[]>(query, { category });
+  return client.fetch<simplifiedProduct[]>(query, { category });
 }
 
 // Ensure dynamic page generation
 export const dynamic = "force-dynamic";
 
-// ✅ Correct Next.js 14 typing for page params
-export default async function CategoryPage({
-  params,
-}: {
-  params: { category: string };
-}) {
-  if (!params || typeof params.category !== "string") {
+export default async function CategoryPage({ params }: { params: { category: string } }) {
+  if (!params?.category) {
     return notFound();
   }
 

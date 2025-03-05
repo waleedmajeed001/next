@@ -10,7 +10,7 @@ export interface simplifiedProduct {
 
 export interface fullProduct {
   _id: string;
-  images: any; // Ensure images are stored as an array of URLs
+  images: string[]; // Changed from any to string[] to specify an array of image URLs
   price: number;
   slug: string;
   categoryName: string;
